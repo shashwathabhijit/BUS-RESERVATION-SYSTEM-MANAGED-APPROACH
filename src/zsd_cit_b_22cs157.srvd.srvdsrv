@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service Definition for Bus App'
+define service ZSD_CIT_B_22CS157 {
+  expose ZC_CIT_B_22CS157 as BusBooking;
+  expose ZC_CIT_I_157     as Passengers;
+}

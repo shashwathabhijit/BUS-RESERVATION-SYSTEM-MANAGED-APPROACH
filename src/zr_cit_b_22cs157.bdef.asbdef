@@ -1,0 +1,69 @@
+managed implementation in class zbp_cit_b_22CS unique;
+strict (2);
+with draft;
+
+// Header Behavior
+define behavior for ZR_CIT_B_22CS157 alias Bus
+persistent table zcit_b_22CS157
+draft table zcit_bd_22CS157
+lock master
+total etag Lastchangedat
+authorization master ( instance )
+etag master Locallastchangedat
+{
+  create;
+  update;
+  delete;
+
+  // Explicit draft actions required by strict(2)
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  association _Passengers { create; with draft; }
+
+  field ( numbering : managed, readonly ) BookId;
+  field ( readonly ) Lastchangedat, Locallastchangedat;
+
+  mapping for zcit_b_22CS157
+  {
+    BookId = book_id;
+    BusNo = bus_no;
+    CustomerName = customer_name;
+    TravelDate = travel_date;
+    TotalPrice = total_price;
+    Currency = currency;
+    Locallastchangedat = locallastchangedat;
+    Lastchangedat = lastchangedat;
+  }
+}
+
+// Item Behavior
+define behavior for ZR_CIT_I_22CS157 alias Passenger
+implementation in class zbp_cit_i_22CS unique
+persistent table zcit_iB_22CS157
+draft table zcit_iY_22CS157
+lock dependent by _Bus
+authorization dependent by _Bus
+etag master Locallastchangedat
+{
+  update;
+  delete;
+
+  association _Bus { with draft; }
+
+  field ( numbering : managed, readonly ) PassId;
+  field ( readonly ) BookId, Locallastchangedat;
+
+  mapping for zcit_iB_22CS157
+  {
+    PassId = pass_id;
+    BookId = book_id;
+    PassName = pass_name;
+    Age = age;
+    SeatNo = seat_no;
+    Locallastchangedat = locallastchangedat;
+  }
+}
